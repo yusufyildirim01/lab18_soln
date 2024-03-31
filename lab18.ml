@@ -11,7 +11,7 @@ to allow mutability. The payoff exercises here are Exercises 9, 11,
 and 12.
 
 Finally, you'll program a simple implementation of environments --
-allowing lookup in and extending of environments -- which may be
+allowing lookup in and extension of environments -- which may be
 helpful with your work on the final project.  *)
 
 (*
@@ -62,11 +62,8 @@ expression `3 + 5` in an empty environment.
 
 (*....................................................................
 Exercise 2. Determine the result of evaluating the following
-expression in the environment {x ↦ 3}
-
-    (x + 5)
-
-by carrying out the derivation for 
+expression `x + 5` in the environment `{x ↦ 3}` by carrying out the
+derivation for
 
     {x ↦ 3} ⊢ x + 5 ⇓ ???
 ....................................................................*)
@@ -74,9 +71,9 @@ by carrying out the derivation for
 (* ANSWER: Carrying out each step in the derivation:
 
     {x ↦ 3} ⊢ x + 5 ⇓
-                     | {x ↦ 3} ⊢ x ⇓ 3    (R_var)
-                     | {x ↦ 3} ⊢ 5 ⇓ 5    (R_int)
-                     ⇓ 8                  (R_+)
+                    | {x ↦ 3} ⊢ x ⇓ 3    (R_var)
+                    | {x ↦ 3} ⊢ 5 ⇓ 5    (R_int)
+                    ⇓ 8                  (R_+)
 
    Again, we've labeled each line with the name of the equation that
    was used from the set of equations in Figure 19.1. You should do
@@ -91,19 +88,35 @@ expression `let x = 3 in x + 5` in an empty environment.
 
   {} ⊢ let x = 3 in x + 5 ⇓
                           | {} ⊢ 3 ⇓ 3              (R_int)
-                          | {x ↦ 3} ⊢ x + 5 ⇓ 8    (Exercise 2)
+                          | {x ↦ 3} ⊢ x + 5 ⇓ 8     (Exercise 2)
                           ⇓ 8                       (R_let)
 
    Note the labeling of one of the steps with the result from a
-   previous exercise. *)
+   previous exercise.
+   
+   The R_let rule specifies that the environment to be used in the
+   third line in this derivation should be E{x → v_D}, where
+
+     * the metavariable E at this point is the empty environment {},
+     * the metavariable x is the object variable x
+     * the metavariable v_D is 3.
+
+   Extending {} with a mapping of x to 3 gives the environment {x →
+   3}, which is exactly the environment that we use in line 3. The
+   generation of the extended environment is carried out implicitly,
+   the steps in doing so isn't spelled out explicitly here and needn't
+   be in your own derivations.
+ *)
 
 (* Now it's your turn. We recommend doing these exercises with pencil
 on paper. Alternatively, you might share a Google doc and work on
-developing the solutions there. *)
+developing the solutions there. After you've worked them out and
+verified them with staff, you can later copy them into your lab
+document. *)
 
 (*....................................................................
 Exercise 4. Carry out the derivation for the semantics of the
-expression `x * x` in the environment mapping `x` to `6`, following
+expression `x * x` in an environment mapping `x` to `6`, following
 the rules in Figure 19.1.
 ....................................................................*)
 
@@ -164,7 +177,10 @@ in the empty environment.
 
 (*====================================================================
   Part 2: Pen and paper exercises, dynamic vs. lexical semantics
- *)
+
+The derivations you'll be constructing for these exercises can get
+*very complicated* -- as long as 33 lines for exercise 12 -- so you'll
+want to do them on paper, and check parts as you go.  *)
 
 (*....................................................................
 Exercise 8: For each of the following expressions, derive its final
@@ -199,8 +215,8 @@ initially empty environment.
        | {x ↦ 50} ⊢ x + 1 ⇓
        |                   | {x ↦ 50} x ⇓ 50   (R_var)
        |                   | {x ↦ 50} 1 ⇓ 1    (R_int)
-       |                   ⇓ 51                 (R_+)
-       ⇓ 51                                     (R_let)
+       |                   ⇓ 51                (R_+)
+       ⇓ 51                                    (R_let)
 
 3.
 
@@ -208,9 +224,9 @@ initially empty environment.
        ⇓
        | {} ⊢ 2 ⇓ 2                            (R_int)
        | {x ↦ 2} ⊢ x * x ⇓
-       |                  | {x ↦ 2} ⊢ x ⇓ 2   (R_var)
-       |                  | {x ↦ 2} ⊢ x ⇓ 2   (R_var)
-       |                  ⇓ 4                  (R_* )
+       |                 | {x ↦ 2} ⊢ x ⇓ 2     (R_var)
+       |                 | {x ↦ 2} ⊢ x ⇓ 2     (R_var)
+       |                 ⇓ 4                   (R_* )
        ⇓ 4                                     (R_let)
 
 4.
@@ -220,8 +236,8 @@ initially empty environment.
        | {} ⊢ 51 ⇓ 51                          (R_int)
        | {x ↦ 51} ⊢ let x = 124 in x
        |    ⇓
-       |    | {x ↦ 51} ⊢ 124 ⇓ 124            (R_int)
-       |    | {x ↦ 124} ⊢ x ⇓ 124             (R_var)
+       |    | {x ↦ 51} ⊢ 124 ⇓ 124             (R_int)
+       |    | {x ↦ 124} ⊢ x ⇓ 124              (R_var)
        |    ⇓ 124                              (R_let)
        ⇓ 124                                   (R_let)
 
@@ -374,7 +390,7 @@ empty environment.
 (*....................................................................
 Exercise 12: For the following expression, derive its value using the
 LEXICAL evaluation rules for imperative programming in Figure 19.4.
-Show all steps using pen and paper, and label them with the name of
+Show all steps using pencil and paper, and label them with the name of
 the evaluation rule used. The expression should be evaluated in an
 initially empty environment and an initially empty store.
 
@@ -467,25 +483,27 @@ a string, and an environment will be represented as an "association
 list" made of pairs of variables and their integer values.
 
 The `List` module has some functions useful for manipulating
-association lists. You may want to make use of them here. *)
+association lists. You may want to make use of them here. See
+<https://v2.ocaml.org/api/List.html#1_Associationlists>.  
+ *)
 
 type varid = string ;;
 type value = int ;;
 type env = (varid * value) list ;;
 
 (*....................................................................
-Exercise 13: Fill in the implementation of the empty environment.
+Exercise 13: Write a function `empty : unit -> env` that returns an
+empty environment.
 ....................................................................*)
 
 let empty () : env = [] ;;
 
 (*....................................................................
 Exercise 14: Write a function `extend : env -> varid -> value -> env`
-that extends an environment; that is, `extend e x v` should extend the
-environment `e` to map `x` to `v`, returning an environment that maps
-variables to values just as `e` does except that it maps `x` to
-`v`. Make sure to handle the case where `x` is already in the
-environment.
+that extends an environment; that is, `extend e x v` should return an
+environment that maps variables to values just as `e` does *except*
+that it maps `x` to `v`. Make sure to handle the case where `x` is
+already in the environment.
 ....................................................................*)
 
 let extend (e : env) (x : varid) (v : value) : env =
@@ -499,3 +517,7 @@ returns the value of a variable in the given environment, raising a
 
 let lookup : varid -> env -> value =
   List.assoc ;;
+
+(* The requested function is already implemented in the `List` library
+   as `List.assoc`, including the returning of the `Not_found`
+   exception, so we just use it directly here. *)
