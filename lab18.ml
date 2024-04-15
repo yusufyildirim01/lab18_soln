@@ -17,6 +17,7 @@ helpful with your work on the final project.  *)
 (*
                                SOLUTION
  *)
+ 
 
 (*====================================================================
   Part 1: An environment semantics derivation
